@@ -1,74 +1,44 @@
 import openpyxl
+import datetime
 
-nums_sheets = [2, 3, 4, 5, 6, 7]
+# Открываем исходный файл *.xlsx
+wb_source              = openpyxl.load_workbook('20230315.xlsx')
+sheet_source_bryansk   = wb_source.worksheets[1]
+sheet_source_abdc      = wb_source.worksheets[2]
+sheet_source_soop      = wb_source.worksheets[3]
+sheet_source_gibdd     = wb_source.worksheets[4]
+sheet_source_zapret    = wb_source.worksheets[5]
+sheet_source_zaderj    = wb_source.worksheets[6]
+sheet_source_zags      = wb_source.worksheets[7]
 
+# Создаем итоговый файл xlsx для копирования в него строк из исходного файла после фильтра
+wb_result              = openpyxl.Workbook()
+sheet_result_abdc      = wb_result.create_sheet("АБДЦ", 0)
+sheet_result_soop      = wb_result.create_sheet("АП СООП", 1)
+sheet_result_gibdd     = wb_result.create_sheet("АП ГИБДД", 2)
+sheet_result_zapret    = wb_result.create_sheet("ЗАПРЕТНИКИ", 3)
+sheet_result_zaderj    = wb_result.create_sheet("ЗАДЕРЖАНИЯ", 4)
+sheet_result_zags      = wb_result.create_sheet("ЗАГС", 5)
 
-def open_sheets(nums_sheets: list):
-    for num_sheet in nums_sheets:
-        sheet = wb.worksheets[num_sheet]
-        yield sheet
+# Фильтр страницы АБДЦ
+for row_abdc in sheet_source_abdc.iter_rows(min_row=2, values_only=True):
+    list_abdc = [cell for cell in row_abdc]
+    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+    if list_abdc[3] != None:
+        list_abdc[3] = str(list_abdc[3])[6:8] + '.' + str(list_abdc[3])[4:6] + '.' + str(list_abdc[3])[:4]
+    print('АДБЦ:', list_abdc)
 
-
-def filter_sheets(sheets: object):
-    sheet_bryansk = wb.worksheets[1]
-    print('Количество строк в Брянск:', sheet_bryansk.max_row)
-
-    for sheet in sheets:
-        print(f'Начало обработки страницы: {sheet}')
-
-        if "АБДЦ" in str(sheet):
-            print('Количество строк в АБДЦ:', sheet.max_row)
-            count_1 = 2 # Подсчет для первого цикла for
-            count_2 = 2 # Подсчет для второго цикла for
-
-            for row in range(sheet.max_row - 1):
-                A1 = 'A' + str(count_1)
-                B1 = 'B' + str(count_1)
-                C1 = 'C' + str(count_1)
-                D1 = 'D' + str(count_1)
-                #print('АБДЦ: ', A1)
-
-                surname_1  = str(sheet[A1].value).strip().upper()
-                name_1     = str(sheet[B1].value).strip().upper()
-                otch_1     = str(sheet[C1].value).strip().upper()
-                birthday_1 = str(sheet[D1].value).strip().upper()
-
-                for row in range(sheet_bryansk.max_row - 1):
-                    A2 = 'A' + str(count_2)
-                    B2 = 'B' + str(count_2)
-                    C2 = 'C' + str(count_2)
-                    D2 = 'D' + str(count_2)
-
-                    surname_2  = str(sheet_bryansk[A2].value).strip().upper()
-                    name_2     = str(sheet_bryansk[B2].value).strip().upper()
-                    otch_2     = str(sheet_bryansk[C2].value).strip().upper()
-                    birthday_2 = str(sheet_bryansk[D2].value).strip().upper()
-
-                    #print('Брянск: ', A1)
-
-                    if (surname_1 == surname_2) and (name_1 == name_2) and (otch_1 == otch_2):
-                        print(f'Совпадение: {count_1}', surname_1, name_1, otch_1, birthday_1)
-                    else:
-                        for cell in sheet[count_1]:
-                            cell.value = None
-
-                    count_2 = count_2 + 1
-
-                count_2 = 2
-                count_1 = count_1 + 1
+    # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
+    for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
+        list_bryansk = [cell for cell in row_bryansk]
+        # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+        if list_bryansk[3] != None:
+            list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
+        print('Bryansk', list_bryansk)
+        # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
+        if list_abdc[0] == list_bryansk[0] and list_abdc[1] == list_bryansk[1] and list_abdc[2] == list_bryansk[2] and list_abdc[3] == list_bryansk[3]:
+            print(f"Совпадение! ({list_bryansk[0]})")
+            sheet_result_abdc.append(row_abdc)
 
 
-        elif "АП СООП" in str(sheet):
-            print("АП СООП")
-
-
-if __name__ == '__main__':
-    # Открываем файл xlsx
-    wb = openpyxl.load_workbook('20230316.xlsx')
-    # Получаем все страницы из файла
-    sheets = open_sheets(nums_sheets)
-    # Фильтр страниц на совпадение с второй страницей
-    result = filter_sheets(sheets)
-
-    wb.save('result.xlsx')
-
+wb_result.save('result.xlsx')
