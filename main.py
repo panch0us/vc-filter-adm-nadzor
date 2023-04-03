@@ -163,7 +163,6 @@ for el in set_soop:
     sheet_result_soop.append(el)
 
 # Фильтр страницы АП ГИБДД
-
 for row_gibdd in sheet_source_gibdd.iter_rows(min_row=2, min_col=2, values_only=True):
     list_gibdd = [cell for cell in row_gibdd]
     # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
