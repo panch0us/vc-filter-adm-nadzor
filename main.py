@@ -57,7 +57,7 @@ except IndexError:
     exit()
 
 # Создаем итоговый файл xlsx для копирования в него строк из исходного файла после фильтра
-wb_result           = openpyxl.Workbook()
+wb_result           = openpyxl.Workbook("result")
 sheet_result_abdc   = wb_result.create_sheet("АБДЦ", 0)
 sheet_result_soop   = wb_result.create_sheet("АП СООП", 1)
 sheet_result_gibdd  = wb_result.create_sheet("АП ГИБДД", 2)
