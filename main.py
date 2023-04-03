@@ -21,7 +21,8 @@ sheet_result_zaderj    = wb_result.create_sheet("ЗАДЕРЖАНИЯ", 4)
 sheet_result_zags      = wb_result.create_sheet("ЗАГС", 5)
 
 # Проверка перед началом фильтра:
-print(f"""           ВНИМАНИЕ! Перед обработкой таблица должна соответствовать следующим параметрам:
+"""
+print(f""           ВНИМАНИЕ! Перед обработкой таблица должна соответствовать следующим параметрам:
     ---------------------------------------------------------------------------------------------------------------
     БРЯНСК:     Заголовок:      [Фамилия] [Имя] [Отчество] [Дата рождения (формат: ДД.ММ.ГГГГ)]
     ---------------------------------------------------------------------------------------------------------------
@@ -37,13 +38,16 @@ print(f"""           ВНИМАНИЕ! Перед обработкой табл�
     ---------------------------------------------------------------------------------------------------------------
     ЗАГС:       Заголовок:  [№] [Фамилия] [Имя] [Отчество] [Дата рождения (формат: ДД.ММ.ГГГГ)]
     ---------------------------------------------------------------------------------------------------------------
-""")
+"")
+
 
 question = int(input("Если таблица соответсвтует указанным требованиям - введите цифру 1. "
                      "Если нет, введите любой другой символ: "))
 
 if question != 1:
     exit()
+"""
+
 
 # Фильтр страницы АБДЦ
 for row_abdc in sheet_source_abdc.iter_rows(min_row=2, values_only=True):
@@ -68,16 +72,121 @@ for row_abdc in sheet_source_abdc.iter_rows(min_row=2, values_only=True):
             print(f"Совпадение АБДЦ с Брянск: {list_bryansk[0], list_bryansk[1], list_bryansk[2], list_bryansk[3]}")
             sheet_result_abdc.append(row_abdc)
 
-
 # Фильтр страницы АП СООП
+for row_soop in sheet_source_soop.iter_rows(min_row=1, values_only=True):
+    list_soop = [cell for cell in row_soop]
+    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+    if list_soop[3] != None:
+        list_soop[3] = list_soop[3].strftime("%d.%m.%Y")
+    #print('ОП СООП:', list_soop)
+
+    # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
+    for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
+        list_bryansk = [cell for cell in row_bryansk]
+        # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+        if list_bryansk[3] != None:
+            list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
+        #print('Bryansk', list_bryansk)
+        # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
+        if (list_soop[0] == list_bryansk[0] and
+                list_soop[1] == list_bryansk[1] and
+                list_soop[2] == list_bryansk[2] and
+                list_soop[3] == list_bryansk[3]):
+            print(f"Совпадение АП СООП с Брянск: {list_bryansk[0], list_bryansk[1], list_bryansk[2], list_bryansk[3]}")
+            sheet_result_soop.append(row_soop)
 
 # Фильтр страницы АП ГИБДД
+for row_gibdd in sheet_source_gibdd.iter_rows(min_row=2, min_col=2, values_only=True):
+    list_gibdd = [cell for cell in row_gibdd]
+    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+    if list_gibdd[3] != None:
+        list_gibdd[3] = list_gibdd[3]#.strftime("%d.%m.%Y")
+    #print('АП ГИБДД:', list_gibdd)
+
+    # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
+    for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
+        list_bryansk = [cell for cell in row_bryansk]
+        # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+        if list_bryansk[3] != None:
+            list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
+        #print('Bryansk', list_bryansk)
+        # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
+        if (list_gibdd[0] == list_bryansk[0] and
+                list_gibdd[1] == list_bryansk[1] and
+                list_gibdd[2] == list_bryansk[2] and
+                list_gibdd[3] == list_bryansk[3]):
+            print(f"Совпадение АП ГИБДД с Брянск: {list_bryansk[0], list_bryansk[1], list_bryansk[2], list_bryansk[3]}")
+            sheet_result_gibdd.append(row_gibdd)
 
 # Фильтр страницы ЗАПРЕТНИКИ
+for row_zapret in sheet_source_zapret.iter_rows(min_row=2, min_col=1, values_only=True):
+    list_zapret = [cell for cell in row_zapret]
+    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+    if list_zapret[3] != None:
+        list_zapret[3] = list_zapret[3].strftime("%d.%m.%Y")
+    #print('ЗАПРЕТНИКИ:', list_zapret)
+
+    # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
+    for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
+        list_bryansk = [cell for cell in row_bryansk]
+        # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+        if list_bryansk[3] != None:
+            list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
+        #print('Bryansk', list_bryansk)
+        # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
+        if (list_zapret[0] == list_bryansk[0] and
+                list_zapret[1] == list_bryansk[1] and
+                list_zapret[2] == list_bryansk[2] and
+                list_zapret[3] == list_bryansk[3]):
+            print(f"Совпадение ЗАПРЕТНИКИ с Брянск: {list_bryansk[0], list_bryansk[1], list_bryansk[2], list_bryansk[3]}")
+            sheet_result_zapret.append(row_zapret)
+
 
 # Фильтр страницы ЗАДЕРЖАНИЯ
+for row_zaderj in sheet_source_zaderj.iter_rows(min_row=1, min_col=2, values_only=True):
+    list_zaderj = [cell for cell in row_zaderj]
+    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+    if list_zaderj[3] != None:
+        list_zaderj[3] = list_zaderj[3].strftime("%d.%m.%Y")
+    #print('ЗАДЕРЖАНИЯ:', list_zaderj)
+
+    # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
+    for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
+        list_bryansk = [cell for cell in row_bryansk]
+        # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+        if list_bryansk[3] != None:
+            list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
+        #print('Bryansk', list_bryansk)
+        # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
+        if (list_zaderj[0] == list_bryansk[0] and
+                list_zaderj[1] == list_bryansk[1] and
+                list_zaderj[2] == list_bryansk[2] and
+                list_zaderj[3] == list_bryansk[3]):
+            print(f"Совпадение ЗАПРЕТНИКИ с Брянск: {list_bryansk[0], list_bryansk[1], list_bryansk[2], list_bryansk[3]}")
+            sheet_result_zaderj.append(row_zaderj)
 
 # Фильтр страницы ЗАГС
+for row_zags in sheet_source_zags.iter_rows(min_row=2, min_col=2, values_only=True):
+    list_zags = [cell for cell in row_zags]
+    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+    #if list_zags[3] != None:
+    #    list_zags[3] = list_zags[3]#.strftime("%d.%m.%Y")
+    #print('ЗАДЕРЖАНИЯ:', list_zags)
+
+    # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
+    for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
+        list_bryansk = [cell for cell in row_bryansk]
+        # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
+        if list_bryansk[3] != None:
+            list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
+        #print('Bryansk', list_bryansk)
+        # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
+        if (list_zags[0] == list_bryansk[0] and
+                list_zags[1] == list_bryansk[1] and
+                list_zags[2] == list_bryansk[2] and
+                list_zags[3] == list_bryansk[3]):
+            print(f"Совпадение ЗАПРЕТНИКИ с Брянск: {list_bryansk[0], list_bryansk[1], list_bryansk[2], list_bryansk[3]}")
+            sheet_result_zags.append(row_zags)
 
 
 wb_result.save('result.xlsx')
