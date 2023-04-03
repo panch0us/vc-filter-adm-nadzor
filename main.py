@@ -74,7 +74,7 @@ test_zapret            = list(sheet_source_zapret.iter_rows( min_row=2, min_col=
 test_zaderj            = list(sheet_source_zaderj.iter_rows( min_row=1, min_col=2, max_col=5, values_only=True))[0]
 test_zags              = list(sheet_source_zags.iter_rows(   min_row=2, min_col=2, max_col=5, values_only=True))[0]
 
-print("*************** ПРЕДВАРИТЕЛЬНОЕ СРАВНЕНИЕ СТРОК В СТРАНИЦАХ **************")
+print("\n*************** ПРЕДВАРИТЕЛЬНОЕ СРАВНЕНИЕ СТРОК В СТРАНИЦАХ **************")
 
 try:
     print(tabulate.tabulate([
@@ -94,7 +94,7 @@ except AttributeError:
     input("Исходный файл не соответвсует правилам оформления!\nНажмите Enter для выхода.")
     exit()
 
-question = int(input("Если таблица и строки в страницах соответствует указанным требованиям - введите цифру 1.\n"
+question = int(input("\nЕсли таблица и строки в страницах соответствует указанным требованиям - введите цифру 1.\n"
                      "Для выхода из программы нажмите Enter: "))
 print("")
 
