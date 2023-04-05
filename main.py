@@ -74,7 +74,7 @@ test_zapret  = list(sheet_source_zapret.iter_rows( min_row=2, min_col=1, max_col
 test_zaderj  = list(sheet_source_zaderj.iter_rows( min_row=1, min_col=2, max_col=5, values_only=True))[0]
 test_zags    = list(sheet_source_zags.iter_rows(   min_row=2, min_col=2, max_col=5, values_only=True))[0]
 
-# Создаем множества для удаления одинаковых записей из отфильтрованных списков
+# Создаем множества для дальнейшего удаления одинаковых записей из отфильтрованных списков
 set_abdc   = set()
 set_soop   = set()
 set_gibdd  = set()
@@ -123,8 +123,6 @@ for row_abdc in sheet_source_abdc.iter_rows(min_row=2, values_only=True):
         # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
         if list_bryansk[3] != None:
             list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
-        #print('Bryansk', list_bryansk)
-
         # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
         if (list_abdc[0] == list_bryansk[0] and
                 list_abdc[1] == list_bryansk[1] and
@@ -142,7 +140,6 @@ for row_soop in sheet_source_soop.iter_rows(min_row=1, values_only=True):
     # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
     if list_soop[3] != None:
         list_soop[3] = list_soop[3].strftime("%d.%m.%Y")
-    #print('ОП СООП:', list_soop)
 
     # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
     for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
@@ -150,7 +147,6 @@ for row_soop in sheet_source_soop.iter_rows(min_row=1, values_only=True):
         # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
         if list_bryansk[3] != None:
             list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
-        #print('Bryansk', list_bryansk)
         # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
         if (list_soop[0] == list_bryansk[0] and
                 list_soop[1] == list_bryansk[1] and
@@ -165,10 +161,6 @@ for el in set_soop:
 # Фильтр страницы АП ГИБДД
 for row_gibdd in sheet_source_gibdd.iter_rows(min_row=2, min_col=2, values_only=True):
     list_gibdd = [cell for cell in row_gibdd]
-    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
-    #if list_gibdd[3] != None:
-    #    list_gibdd[3] = list_gibdd[3]#.strftime("%d.%m.%Y")
-    #print('АП ГИБДД:', list_gibdd)
 
     # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
     for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
@@ -176,7 +168,6 @@ for row_gibdd in sheet_source_gibdd.iter_rows(min_row=2, min_col=2, values_only=
         # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
         if list_bryansk[3] != None:
             list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
-        #print('Bryansk', list_bryansk)
         # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
         if (list_gibdd[0] == list_bryansk[0] and
                 list_gibdd[1] == list_bryansk[1] and
@@ -194,7 +185,6 @@ for row_zapret in sheet_source_zapret.iter_rows(min_row=2, min_col=1, values_onl
     # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
     if list_zapret[3] != None:
         list_zapret[3] = list_zapret[3].strftime("%d.%m.%Y")
-    #print('ЗАПРЕТНИКИ:', list_zapret)
 
     # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
     for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
@@ -202,7 +192,6 @@ for row_zapret in sheet_source_zapret.iter_rows(min_row=2, min_col=1, values_onl
         # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
         if list_bryansk[3] != None:
             list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
-        #print('Bryansk', list_bryansk)
         # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
         if (list_zapret[0] == list_bryansk[0] and
                 list_zapret[1] == list_bryansk[1] and
@@ -220,7 +209,6 @@ for row_zaderj in sheet_source_zaderj.iter_rows(min_row=1, min_col=2, values_onl
     # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
     if list_zaderj[3] != None:
         list_zaderj[3] = list_zaderj[3].strftime("%d.%m.%Y")
-    #print('ЗАДЕРЖАНИЯ:', list_zaderj)
 
     # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
     for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
@@ -228,7 +216,6 @@ for row_zaderj in sheet_source_zaderj.iter_rows(min_row=1, min_col=2, values_onl
         # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
         if list_bryansk[3] != None:
             list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
-        #print('Bryansk', list_bryansk)
         # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
         if (list_zaderj[0] == list_bryansk[0] and
                 list_zaderj[1] == list_bryansk[1] and
@@ -243,10 +230,6 @@ for el in set_zaderj:
 # Фильтр страницы ЗАГС
 for row_zags in sheet_source_zags.iter_rows(min_row=2, min_col=2, values_only=True):
     list_zags = [cell for cell in row_zags]
-    # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
-    #if list_zags[3] != None:
-    #    list_zags[3] = list_zags[3]#.strftime("%d.%m.%Y")
-    #print('ЗАДЕРЖАНИЯ:', list_zags)
 
     # Сравниваем ФИО и дату рождения между АБДЦ и Брянск
     for row_bryansk in sheet_source_bryansk.iter_rows(min_row=2, min_col=1, max_col=4, values_only=True):
@@ -254,7 +237,6 @@ for row_zags in sheet_source_zags.iter_rows(min_row=2, min_col=2, values_only=Tr
         # Приводим формат даты рождения к ДД.ММ.ГГГГ (только если поле не пустое)
         if list_bryansk[3] != None:
             list_bryansk[3] = list_bryansk[3].strftime("%d.%m.%Y")
-        #print('Bryansk', list_bryansk)
         # Если строка имеет совпадения по ФИО и дате рождения, то сохраяем эту строку в итоговый файл
         if (list_zags[0] == list_bryansk[0] and
                 list_zags[1] == list_bryansk[1] and
